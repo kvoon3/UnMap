@@ -1,17 +1,17 @@
 {
-  "name": "@kvoon3/one-map",
+  "name": "@kvoon3/unmap",
   "type": "module",
   "version": "0.0.0",
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.14.0+sha1.bb42032ff80dba5f9245bc1b03470d2fa0b7fb2f",
   "description": "_description_",
   "author": "Kevin Kwong <a1176079417@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/kvoon3/one-map#readme",
+  "homepage": "https://github.com/kvoon3/unmap#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kvoon3/one-map.git"
+    "url": "git+https://github.com/kvoon3/unmap.git"
   },
-  "bugs": "https://github.com/kvoon3/one-map/issues",
+  "bugs": "https://github.com/kvoon3/unmap/issues",
   "keywords": [],
   "sideEffects": false,
   "exports": {
@@ -41,19 +41,23 @@
     "lint": "eslint .",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "nr build",
-    "release": "bumpp && npm publish",
+    "release": "bumpp && pnpm -r publish",
     "start": "esno src/index.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "consola": "^3.2.3",
+    "long": "^5.2.3",
     "nanoid": "^5.0.4"
   },
   "devDependencies": {
+    "@amap/amap-jsapi-types": "^0.0.13",
     "@antfu/eslint-config": "^2.4.0",
-    "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.6",
+    "@playwright/test": "^1.40.1",
+    "@types/geojson": "^7946.0.13",
+    "@types/mapbox-gl": "^2.7.19",
     "@types/node": "^20.10.4",
     "bumpp": "^9.2.0",
     "eslint": "^8.55.0",

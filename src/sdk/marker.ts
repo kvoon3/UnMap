@@ -1,11 +1,13 @@
-import type { LngLat } from '../base'
+import type { ILngLat } from '../base'
+import type { IAnchor } from '../base/anchor'
 import type { WhichMap } from '../map'
-import type { ILayer } from './layer'
+import type { IEvented } from './evented'
 import type { IMap } from './map'
+import type { IPopup } from './popup'
 
 export interface IMarkerOption {
   content?: HTMLElement | string
-  anchor?: string
+  anchor?: IAnchor
   angle?: number
 
   // TODO: icon and size
@@ -16,11 +18,18 @@ export interface IMarkerOption {
   raiseOnDrag?: boolean
 }
 
-export interface IMarker extends ILayer {
+export interface IMarker<o = object> extends IEvented {
   _id: string
-  _original: object
+  _original: o
   _whichMap: WhichMap
-  setLngLat(LngLat: LngLat): IMarker
-  getLngLat(): LngLat
+  popup: IPopup | undefined
+  setLngLat(lnglat: ILngLat): IMarker
+  getLngLat(): ILngLat
   addTo(map: IMap): IMarker
+  remove(): IMarker
+  setRotation(rotate: number): IMarker
+  getRotation(): number
+  setPopup(popup: IPopup): IMarker
+  getPopup(): IPopup | undefined
+  togglePopup(): IMarker
 }

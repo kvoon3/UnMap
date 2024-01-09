@@ -1,14 +1,15 @@
-import type { ILayer, ILayerOption } from './layer'
+import type { LoadUrlItem } from '../base/loadUrl'
+import type { ILineString, ILineStringOption } from './lineString'
 import type { IMap, IMapOption } from './map'
 import type { IMarker, IMarkerOption } from './marker'
+import type { IPopup, IPopupOption } from './popup'
 
 export interface ISDK {
-//   Util: Util
   Map(opt: IMapOption): IMap
-  Layer(opt: ILayerOption): ILayer
-  Popup(opt: ILayerOption): ILayer
+  Popup(opt?: IPopupOption): IPopup
   Marker(opt?: IMarkerOption): IMarker
-  //   Polyline(points: Array<LngLat>, opt?: PolylineOption): Polyline
+  LineString(opt: ILineStringOption): ILineString
   //   Icon(opt: IconOption): Icon
-  load(url: string, href?: string): void
+
+  load(loadUrls: LoadUrlItem[]): Promise<HTMLScriptElement | HTMLLinkElement>[]
 }

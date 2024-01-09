@@ -1,15 +1,6 @@
-import type { ILayer } from './sdk'
+import type { IEvented } from './sdk'
 
 // TODO: move these interface into sdk folder
-
-export interface IPopupOption {
-  LngLat?: Array<number>
-  content?: string | Element
-  class?: string
-  closeBtn?: boolean
-  offset?: Array<number>
-  zIndex?: number
-}
 
 export interface IPolylineOption {
   color?: string
@@ -30,7 +21,7 @@ export interface IViewportOption {
 
 export interface IEventListenerOptions {
   eventName: string
-  host: ILayer
+  host: IEvented
   handler?: Function // one of them must be set (handler | listener)
   listener?: any
 }

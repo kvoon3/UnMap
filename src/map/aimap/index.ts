@@ -1,31 +1,50 @@
-import type { ILayer, ILayerOption, IMap, IMapOption, IMarker, IMarkerOption, ISDK } from '../../sdk'
+import type { ILineString, ILineStringOption, IMap, IMapOption, IMarker, IMarkerOption, IPopupOption, ISDK } from '../../sdk'
+import type { LoadUrlItem } from '../../base'
+import { LineString } from './lingString'
+import { Map } from './map'
+import { Marker } from './marker'
+import { Popup } from './popup'
 
 export class AiMapSDK implements ISDK {
   Map(opt: IMapOption): IMap {
-    throw new Error('Method not implemented.')
+    return new Map(opt)
   }
 
-  Layer(opt: ILayerOption): ILayer {
-    throw new Error('Method not implemented.')
+  Popup(opt: IPopupOption) {
+    return new Popup(opt)
   }
 
-  Popup(opt: ILayerOption): ILayer {
-    throw new Error('Method not implemented.')
+  Marker(opt: IMarkerOption): IMarker {
+    return new Marker(opt)
   }
 
-  Marker(opt?: IMarkerOption | undefined): IMarker {
-    throw new Error('Method not implemented.')
+  LineString(opt: ILineStringOption): ILineString {
+    return new LineString(opt)
   }
 
-  load(url: string, href: string): void {
-    const script = document.createElement('script')
-    script.setAttribute('src', url)
-    script.setAttribute('defer', '')
-    script.setAttribute('async', 'async')
-
-    const link = document.createElement('link')
-    link.setAttribute('href', href)
-    document.body.appendChild(script)
-    document.head.appendChild(link)
+  load(loadUrls: LoadUrlItem[]): Promise<HTMLScriptElement | HTMLLinkElement>[] {
+    return loadUrls.map((i) => {
+      return new Promise((resolve, reject) => {
+        let el: HTMLScriptElement | HTMLLinkElement
+        switch (i.type) {
+          case 'script':
+            el = document.createElement('script')
+            el.setAttribute('src', i.url)
+            el.setAttribute('defer', '')
+            el.setAttribute('async', 'async')
+            break
+          case 'link':
+            el = document.createElement('link')
+            el.setAttribute('href', i.url)
+            el.setAttribute('rel', 'stylesheet')
+            break
+          default:
+            reject(new Error('unknown type'))
+            return
+        }
+        document.body.appendChild(el)
+        el.addEventListener('load', () => resolve(el))
+      })
+    })
   }
 }

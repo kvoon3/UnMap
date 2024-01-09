@@ -1,33 +1,26 @@
-import type { LngLat } from '../base'
+import type { ILngLat } from '../base'
 import type { WhichMap } from '../map'
-import type { ILayer } from './layer'
+import type { IEvented, IMapEventType } from './evented'
 
 export interface IMapOption {
   container: string | HTMLDivElement
   zoom?: number
-  center?: LngLat
-  style?: string
+  center?: ILngLat
+  maxZoom?: number
+  minZoom?: number
 }
 
-export interface IMap extends ILayer {
+export interface IMap<o = object> extends IEvented<keyof IMapEventType> {
   _whichMap: WhichMap
-  _original: object
+  _original: o
   _id: string
-  // TODO: use MapType
-  // MAP_TYPE: MapType
-  addLayer(layer: ILayer | Array<ILayer>): void
-  removeLayer(layer: ILayer | Array<ILayer>): void
-  clearLayers(): void
-  setZoom(zoom: number): void
-  getZoom(): void
-  zoomIn(): void
-  zoomOut(): void
-  // TODO: O.ViewportOption
-  //   fitView(points: LngLat[], opt: O.ViewportOption): void
-  setCenter(center: LngLat): void
-  getCenter(): LngLat
-  panTo(LngLat: LngLat): void
-  // setMapType(type: string): IMap
-  // getMapType?(): string
-  search?(name: string, resolve: Function, reject?: Function): void
+  setZoom(zoom: number): IMap
+  getZoom(): number
+  zoomIn(): IMap
+  zoomOut(): IMap
+  setCenter(center: ILngLat): IMap
+  getCenter(): ILngLat
+  panTo(lnglat: ILngLat): IMap
+  flyTo(lnglat: ILngLat): IMap
+  remove(): void
 }

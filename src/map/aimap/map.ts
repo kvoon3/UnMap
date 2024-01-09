@@ -1,67 +1,69 @@
-/// <reference path="../../types/aimap.d.ts" />
-
 import { nanoid } from 'nanoid'
-import type { LngLat } from '../../base'
-import type { ILayer, IMap } from '../../sdk'
+import type mapboxgl from 'mapbox-gl'
+import type { IMap, IMapEventType, IMapOption } from '../../sdk'
+import type { ILngLat } from '../../base'
 import { WhichMap } from '../mapType'
 
 export class Map implements IMap {
   _whichMap = WhichMap.AiMap
-  _original: object
-  _id: string = nanoid()
-  constructor(opt: any) {
-
+  _original: mapboxgl.Map
+  _id: string
+  constructor(opt: IMapOption) {
+    this._id = nanoid()
+    this._original = new aimap.Map(opt)
   }
 
-  addLayer(layer: ILayer | ILayer[]): void {
-    throw new Error('Method not implemented.')
+  remove(): void {
+    this._original.remove()
   }
 
-  removeLayer(layer: ILayer | ILayer[]): void {
-    throw new Error('Method not implemented.')
+  setZoom(zoom: number) {
+    this._original.setZoom(zoom)
+    return this
   }
 
-  clearLayers(): void {
-    throw new Error('Method not implemented.')
+  getZoom() {
+    return this._original.getZoom()
   }
 
-  setZoom(zoom: number): void {
-    throw new Error('Method not implemented.')
+  zoomIn() {
+    this._original.zoomIn()
+    return this
   }
 
-  getZoom(): void {
-    throw new Error('Method not implemented.')
+  zoomOut() {
+    this._original.zoomOut()
+    return this
   }
 
-  zoomIn(): void {
-    throw new Error('Method not implemented.')
+  setCenter(center: ILngLat) {
+    this._original.setCenter(new aimap.LngLat(center[0], center[1]))
+    return this
   }
 
-  zoomOut(): void {
-    throw new Error('Method not implemented.')
+  getCenter(): ILngLat {
+    return this._original.getCenter().toArray() as [number, number]
   }
 
-  setCenter(center: LngLat): void {
-    throw new Error('Method not implemented.')
+  panTo(lnglat: ILngLat) {
+    this._original.panTo(lnglat)
+    return this
   }
 
-  getCenter(): LngLat {
-    throw new Error('Method not implemented.')
+  flyTo(lnglat: ILngLat) {
+    this._original.flyTo({
+      center: lnglat,
+    })
+    return this
   }
 
-  panTo(LngLat: LngLat): void {
-    throw new Error('Method not implemented.')
+  on<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {
+    this._original.on(eventName, handler)
+    return this
   }
 
-  search?(name: string, resolve: Function, reject?: Function | undefined): void {
-    throw new Error('Method not implemented.')
-  }
-
-  on?(eventName: string, handler: Function): void {
-    throw new Error('Method not implemented.')
-  }
-
-  off?(eventName: string, handler: Function): void {
-    throw new Error('Method not implemented.')
+  off<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {
+    this._original.off(eventName, handler)
+    return this
   }
 }

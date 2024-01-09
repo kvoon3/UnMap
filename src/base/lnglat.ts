@@ -1,1 +1,1 @@
-export type LngLat = [number, number]
+export type ILngLat = [number, number]

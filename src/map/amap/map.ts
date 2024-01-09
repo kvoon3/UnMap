@@ -1,71 +1,74 @@
-/// <reference path="../../types/amap.d.ts" />
-
 import { nanoid } from 'nanoid'
-import type { LngLat } from '../../base'
-import type { ILayer, IMap, IMapOption } from '../../sdk'
-import { WhichMap } from '../mapType'
+import type { ILngLat } from '../../base'
+import type { IMap, IMapEventType, IMapOption } from '../../sdk'
+import { IMapEvent2AMapEvent } from '../../utils'
+import { WhichMap } from '..'
 
 export class Map implements IMap {
   _whichMap = WhichMap.AMap
   _original: AMap.Map
-  _id: string = nanoid()
+  _id: string
   constructor(opt: IMapOption) {
+    const zooms: [number, number] = [opt.minZoom || 2, opt.maxZoom || 30]
+
+    this._id = nanoid()
+
     this._original = new AMap.Map(opt.container, {
-      zoom: opt.zoom,
-      center: opt.center,
+      ...opt,
+      zooms,
     })
   }
 
-  addLayer(layer: ILayer | ILayer[]): void {
-    throw new Error('Method not implemented.')
+  remove(): void {
+    this._original.destroy()
   }
 
-  removeLayer(layer: ILayer | ILayer[]): void {
-    throw new Error('Method not implemented.')
+  setZoom(zoom: number) {
+    this._original.setZoom(zoom)
+    return this
   }
 
-  clearLayers(): void {
-    throw new Error('Method not implemented.')
+  getZoom() {
+    return this._original.getZoom()
   }
 
-  setZoom(zoom: number): void {
-    throw new Error('Method not implemented.')
+  zoomIn() {
+    this._original.zoomIn()
+    return this
   }
 
-  getZoom(): void {
-    throw new Error('Method not implemented.')
+  zoomOut() {
+    this._original.zoomOut()
+    return this
   }
 
-  zoomIn(): void {
-    throw new Error('Method not implemented.')
+  setCenter(center: ILngLat) {
+    this._original.setCenter(new AMap.LngLat(center[0], center[1]))
+    return this
   }
 
-  zoomOut(): void {
-    throw new Error('Method not implemented.')
-  }
-
-  setCenter(center: LngLat): void {
-    this._original.setCenter(new AMap.LngLat(...center))
-  }
-
-  getCenter(): LngLat {
+  getCenter(): ILngLat {
     const { lng, lat } = this._original.getCenter()
     return [lng, lat]
   }
 
-  panTo(LngLat: LngLat): void {
-    throw new Error('Method not implemented.')
+  panTo(lnglat: ILngLat) {
+    this._original.panTo(lnglat)
+    return this
   }
 
-  search?(name: string, resolve: Function, reject?: Function | undefined): void {
-    throw new Error('Method not implemented.')
+  flyTo(lnglat: ILngLat) {
+    this.panTo(lnglat)
+    return this
   }
 
-  on?(eventName: string, handler: Function): void {
-    throw new Error('Method not implemented.')
+  on<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {
+    this._original.on(IMapEvent2AMapEvent(eventName), handler)
+    return this
   }
 
-  off?(eventName: string, handler: Function): void {
-    throw new Error('Method not implemented.')
+  off<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {
+    this._original.off(IMapEvent2AMapEvent(eventName), handler)
+    return this
   }
 }
