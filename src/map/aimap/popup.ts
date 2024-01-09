@@ -35,7 +35,7 @@ export class Popup implements IPopup {
     return this
   }
 
-  getDOMContent() {
+  getElement() {
     return this._domContent
   }
 

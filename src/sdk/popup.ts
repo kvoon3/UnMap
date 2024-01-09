@@ -20,7 +20,7 @@ export interface IPopup<o = object> extends IEvented {
   _domContent: HTMLElement | undefined
   isOpen(): boolean
   setDOMContent(maybeHtmlNode: HTMLElement | string): IPopup
-  getDOMContent(): HTMLElement | undefined
+  getElement(): HTMLElement | undefined
   addTo(map: IMap): IPopup
   remove(): void
   setLngLat(lnglat: ILngLat): IPopup
