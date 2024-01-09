@@ -93,7 +93,7 @@ export class Marker implements IMarker {
   }
 
   setPopup(popup: IPopup<AMap.InfoWindow>) {
-    const DOMContent = popup.getDOMContent()
+    const DOMContent = popup.getElement()
 
     if (!DOMContent)
       throw new Error('not find popup dom content')
@@ -117,7 +117,7 @@ export class Marker implements IMarker {
       const wrapper = document.createElement('div')
       wrapper.style.position = 'relative'
 
-      const popupContent = this.popup.getDOMContent()
+      const popupContent = this.popup.getElement()
       const domContainer = this.domContainer
 
       if (popupContent) {
