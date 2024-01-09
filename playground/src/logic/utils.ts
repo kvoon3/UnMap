@@ -9,7 +9,7 @@ export function loadAMapSDK(unMap: UnMap) {
       return
     }
 
-    // window
+    // @ts-expect-error type error
     window._AMapSecurityConfig = {
       securityJsCode: 'a3db38589ec7faba6945f6758fbd3750',
     }
