@@ -39,6 +39,7 @@
     "build": "unbuild",
     "dev": "unbuild --stub",
     "lint": "eslint .",
+    "play": "nr -C playground dev",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "nr build",
     "release": "bumpp && pnpm -r publish",
@@ -70,6 +71,10 @@
     "unbuild": "^2.0.0",
     "vite": "^5.0.6",
     "vitest": "^1.0.2"
+  },
+  "resolutions": {
+    "jiti": "./jiti-1.19.1.tgz",
+    "unbuild": "./unbuild-2.0.0-rc.0.tgz"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

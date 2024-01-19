@@ -3,6 +3,8 @@
 .idea
 *.log
 *.tgz
+!/jiti-1.19.1.tgz
+!/unbuild-2.0.0-rc.0.tgz
 coverage
 dist
 lib-cov
