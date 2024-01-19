@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UnMap, WhichMap, IMap, IMarker, ILineString  } from '@kvoon3/unmap'
+import { UnMap, WhichMap, IMap, IMarker, ILineString } from '@kvoon3/unmap'
 import { mockLngLats } from '../logic/state'
 import { cleanMapItem, loadAMapSDK, loadAiMapSDK } from '../logic/utils'
 import { traceAllMapEvent, traceAllMarkerEvent } from '../logic/debug'

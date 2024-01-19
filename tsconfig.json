@@ -6,6 +6,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "types": [
+      "@amap/amap-jsapi-types",
+      "@types/geojson",
+      "@types/mapbox-gl",
+      "@types/node"
+    ],
     "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,

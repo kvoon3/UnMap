@@ -1,4 +1,3 @@
-import type { AMap } from '@amap/amap-jsapi-types'
 import type { IMapEventType } from '../sdk'
 import { objectKeys } from './object'
 

@@ -23,8 +23,8 @@ export class AiMapSDK implements ISDK {
   }
 
   load(loadUrls: LoadUrlItem[]): Promise<HTMLScriptElement | HTMLLinkElement>[] {
-    return loadUrls.map((i) => {
-      return new Promise((resolve, reject) => {
+    return loadUrls.map(i =>
+      new Promise((resolve, reject) => {
         let el: HTMLScriptElement | HTMLLinkElement
         switch (i.type) {
           case 'script':
@@ -44,7 +44,7 @@ export class AiMapSDK implements ISDK {
         }
         document.body.appendChild(el)
         el.addEventListener('load', () => resolve(el))
-      })
-    })
+      }),
+    )
   }
 }

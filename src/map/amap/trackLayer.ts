@@ -1,14 +1,16 @@
 import { nanoid } from 'nanoid'
 import { WhichMap } from '../../map/mapType'
-import type { IMap, ISubTrackLayerOption, ITrackLayer, ITrackLayerOption } from '../../sdk'
+import type { IEventHandler, IMap, ISubTrackLayerOption, ITrackLayer, ITrackLayerOption } from '../../sdk'
 
-import { coordinateToAMapLngLat } from '../../utils'
+import { anyEvent2AMapEvent, coordinateToAMapLngLat } from '../../utils'
 
 export class TrackLayer implements ITrackLayer {
   _id: string
-  _original: AMap.Polyline
   _whichMap = WhichMap.AMap
+  _original: AMap.Polyline
+  passedLine: AMap.Polyline
   marker: AMap.Marker
+  path: AMap.LngLat[] | [] = []
   constructor(opt: ITrackLayerOption) {
     this._id = nanoid()
     const trackLayer = opt.layers.find(layer => layer.name === 'track') as ISubTrackLayerOption
@@ -17,55 +19,65 @@ export class TrackLayer implements ITrackLayer {
     //  const startLayer = opt.layers.find(layer => layer.name === 'start')
     //  const endLayer = opt.layers.find(layer => layer.name === 'end')
 
-    const path = trackLayer?.data?.coordinates.map(coordinateToAMapLngLat)
+    this.path = trackLayer?.data?.coordinates.map(coordinateToAMapLngLat) || []
     const strokeColor = trackLayer.style['line-color'] || undefined
     const strokeWeight = trackLayer.style['line-width'] || undefined
 
     this.marker = new AMap.Marker({
       position: trackLayer.data?.coordinates[0],
-      // @ts-expect-error todo
+      // TODO: Type Error
+      // @ts-expect-error todo, unknown property 'autoRotate'
       autoRotate: true,
     })
 
     this._original = new AMap.Polyline({
-      path,
+      path: this.path,
       strokeColor,
       strokeWeight,
       showDir: true,
     })
 
-    // @ts-expect-error todo
-    this.marker.on('moving', (e) => {
-      this._original.setPath(e.passedPath)
+    this.passedLine = new AMap.Polyline({
+      strokeColor: '#AF5',
+    })
+
+    // TODO: Type Error
+    // @ts-expect-error todo, Type Error
+    this.marker.on('moving', (e: { passedPath: AMap.LngLat[] }) => {
+      this.passedLine.setPath(e.passedPath)
     })
   }
 
   addTo(map: IMap<AMap.Map>): ITrackLayer {
     map._original.add(this._original)
+    map._original.add(this.marker)
+    map._original.add(this.passedLine)
     return this
   }
 
   remove(): void {
+    this.marker.remove()
     this._original.remove()
+    this.passedLine.remove()
   }
 
   play() {
-    this.marker.moveAlong()
+    this.marker.moveAlong(this.path, 200)
     return this
   }
 
   pause(): ITrackLayer {
-    this._original.pause()
+    this.marker.pauseMove()
     return this
   }
 
-  on(eventName: string, handler: Function) {
-    this._original.on(eventName, handler)
+  on(eventName: string, handler: IEventHandler) {
+    this._original.on(anyEvent2AMapEvent(eventName), handler)
     return this
   }
 
-  off(eventName: string, handler: Function) {
-    this._original.on(eventName, handler)
+  off(eventName: string, handler: IEventHandler) {
+    this._original.off(anyEvent2AMapEvent(eventName), handler)
     return this
   }
 }

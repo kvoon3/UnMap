@@ -14,6 +14,8 @@ interface IEvent<TOrig = undefined> {
   originalEvent: TOrig
 }
 
+export type IEventHandler<E = any> = (e: E) => void
+
 interface IMapTouchEvent extends IEvent<TouchEvent> {
   type: 'touchstart' | 'touchend' | 'touchcancel'
 
@@ -85,6 +87,14 @@ export interface IMarkerEventType {
   dragstart: IEvent<MouseEvent | TouchEvent | undefined>
   drag: IEvent<MouseEvent | TouchEvent | undefined>
   dragend: IEvent<MouseEvent | TouchEvent | undefined>
+}
+
+export interface ITrackEventType {
+  click: IMapMouseEvent
+  dblclick: IMapMouseEvent
+  movestart: IEvent<MouseEvent | TouchEvent | WheelEvent | undefined>
+  move: IEvent<MouseEvent | TouchEvent | WheelEvent | undefined>
+  moveend: IEvent<MouseEvent | TouchEvent | WheelEvent | undefined>
 }
 
 interface ILineStringMouseEvent extends IEvent<MouseEvent> {

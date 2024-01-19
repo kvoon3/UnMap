@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import type { IMap, IMarker, IMarkerEventType, IMarkerOption, IPopup } from '../../sdk'
+import type { IEventHandler, IMap, IMarker, IMarkerEventType, IMarkerOption, IPopup } from '../../sdk'
 import type { ILngLat } from '../../base'
 import { IMapEvent2AMapEvent, handleContainer, omit } from '../../utils'
 import { WhichMap } from '..'
@@ -148,7 +148,7 @@ export class Marker implements IMarker {
 
   on<E extends keyof IMarkerEventType>(
     eventName: E,
-    handler: (ev: IMarkerEventType[E]) => void,
+    handler: IEventHandler<IMarkerEventType[E]>,
   ) {
     this._original.on(IMapEvent2AMapEvent(eventName), handler)
     return this
@@ -156,7 +156,7 @@ export class Marker implements IMarker {
 
   off<E extends keyof IMarkerEventType>(
     eventName: E,
-    handler: (ev: IMarkerEventType[E]) => void,
+    handler: IEventHandler<IMarkerEventType[E]>,
   ) {
     this._original.off(IMapEvent2AMapEvent(eventName), handler)
     return this
