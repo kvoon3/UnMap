@@ -13,16 +13,19 @@ function useWhichSDK(which: WhichMap) {
 }
 
 export class UnMap {
+  whichMap: WhichMap | 'unknownMap'
   private sdk: ISDK | undefined
-  constructor(maybeSDK: ISDK | WhichMap) {
+  constructor(maybeSDK: ISDK | WhichMap, whichMap?: WhichMap) {
     if (isEmpty(maybeSDK))
       throw new Error('sdk or which sdk info is required')
 
     if (typeof maybeSDK !== 'object') {
       const which = maybeSDK
+      this.whichMap = which
       this.sdk = useWhichSDK(which)
     }
     else {
+      this.whichMap = whichMap || 'unknownMap'
       const sdk = maybeSDK
       this.sdk = sdk
     }

@@ -34,9 +34,9 @@ export class Marker implements IMarker {
 
     const anchor = IAnchor2AMapAnchor[opt.anchor || 'center']
 
-    const content = opt.content === undefined
-      ? opt.content
-      : handleContainer(opt.content)
+    const content = opt.element === undefined
+      ? opt.element
+      : handleContainer(opt.element)
 
     this.domContainer = content
 
@@ -48,7 +48,7 @@ export class Marker implements IMarker {
     }
 
     this._original = new AMap.Marker({
-      ...omit(opt, 'content'),
+      ...omit(opt, 'element'),
       anchor,
       content,
     })

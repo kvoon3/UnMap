@@ -4,7 +4,7 @@ import { isAMapSDKLoaded, isAiMapSDKLoaded } from './state'
 
 export function loadAMapSDK(unMap: UnMap) {
   return new Promise((resolve, reject) => {
-    if (isAMapSDKLoaded.value) {
+    if (window.AMap && isAMapSDKLoaded.value) {
       resolve('done')
       return
     }
@@ -30,7 +30,9 @@ export function loadAMapSDK(unMap: UnMap) {
 }
 export function loadAiMapSDK(unMap: UnMap) {
   return new Promise((resolve, reject) => {
-    if (isAiMapSDKLoaded.value) {
+    // FIXME: type error
+    // @ts-expect-error type error
+    if (window.aimap && isAiMapSDKLoaded.value) {
       resolve('done')
       return
     }

@@ -6,7 +6,7 @@ import type { IMap } from './map'
 import type { IPopup } from './popup'
 
 export interface IMarkerOption {
-  content?: HTMLElement | string
+  element?: HTMLElement | string
   anchor?: IAnchor
   angle?: number
 

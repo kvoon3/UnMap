@@ -13,12 +13,12 @@ export class Marker implements IMarker {
   constructor(opt: IMarkerOption) {
     this._id = nanoid()
 
-    const element = opt.content === undefined
-      ? opt.content
-      : handleContainer(opt.content)
+    const element = opt.element === undefined
+      ? opt.element
+      : handleContainer(opt.element)
 
     this._original = new aimap.Marker({
-      ...omit(opt, 'content'),
+      ...omit(opt, 'element'),
       element,
     })
   }

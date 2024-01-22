@@ -105,7 +105,7 @@ function renderMarker(map: IMap) {
 
     marker.value = unMap
       .Marker({
-        content: personMarkerContainer,
+        element: personMarkerContainer,
       })
       .setLngLat(mockLngLats.Shanghai)
       .setPopup(

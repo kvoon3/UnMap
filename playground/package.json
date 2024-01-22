@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-types": "^0.0.13",
-    "@kvoon3/unmap": "workspace:^",
     "@types/mapbox-gl": "^2.7.19",
     "consola": "^3.2.3",
     "unocss": "^0.58.0"
   },
   "devDependencies": {
+    "@kvoon3/unmap": "workspace:^",
     "@antfu/eslint-config": "^2.4.0",
     "@iconify-json/carbon": "^1.1.27",
     "@unocss/eslint-plugin": "^0.58.0",
