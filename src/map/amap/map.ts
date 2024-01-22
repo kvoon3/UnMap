@@ -3,6 +3,7 @@ import type { ILngLat } from '../../base'
 import type { IMap, IMapEventType, IMapOption } from '../../sdk'
 import { IMapEvent2AMapEvent } from '../../utils'
 import { WhichMap } from '..'
+import type { IPointLike } from '../../sdk/point'
 
 export class Map implements IMap {
   _whichMap = WhichMap.AMap
@@ -60,6 +61,12 @@ export class Map implements IMap {
   flyTo(lnglat: ILngLat) {
     this.panTo(lnglat)
     return this
+  }
+
+  unproject(point: IPointLike): ILngLat {
+    const [x, y] = Array.isArray(point) ? point : [point.x, point.y]
+    const { lng, lat } = this._original.pixelToLngLat(new AMap.Pixel(x, y))
+    return [lng, lat]
   }
 
   on<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {

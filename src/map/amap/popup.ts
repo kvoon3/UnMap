@@ -13,7 +13,11 @@ export class Popup implements IPopup {
   maxWidth: string | undefined
   constructor(opt: IPopupOption) {
     this._id = nanoid()
-    const offset = opt.offset ? new AMap.Pixel(opt.offset.x, opt.offset.y) : undefined
+    const offset = opt.offset
+      ? Array.isArray(opt.offset)
+        ? new AMap.Pixel(...opt.offset)
+        : new AMap.Pixel(opt.offset.x, opt.offset.y)
+      : undefined
     this.className = opt.className
     this.maxWidth = opt.maxWidth
 

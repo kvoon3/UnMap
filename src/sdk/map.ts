@@ -1,5 +1,6 @@
 import type { ILngLat } from '../base'
 import type { WhichMap } from '../map'
+import type { IPointLike } from './point'
 import type { IEvented, IMapEventType } from './evented'
 
 export interface IMapOption {
@@ -23,4 +24,5 @@ export interface IMap<o = object> extends IEvented<keyof IMapEventType> {
   panTo(lnglat: ILngLat): IMap
   flyTo(lnglat: ILngLat): IMap
   remove(): void
+  unproject(point: IPointLike): ILngLat
 }

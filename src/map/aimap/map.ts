@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
+import type { IPointLike } from '../../sdk/point'
 import type { IMap, IMapEventType, IMapOption } from '../../sdk'
 import type { ILngLat } from '../../base'
 import { WhichMap } from '../mapType'
@@ -55,6 +56,16 @@ export class Map implements IMap {
       center: lnglat,
     })
     return this
+  }
+
+  unproject(point: IPointLike): ILngLat {
+    const { lng, lat } = this._original.unproject(
+      Array.isArray(point)
+        ? point
+        : [point.x, point.y],
+    )
+
+    return [lng, lat]
   }
 
   on<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {

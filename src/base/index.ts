@@ -1,5 +1,4 @@
 export * from './lnglat'
 export * from './anchor'
 export * from './loadUrl'
-export * from './point'
 export * from './style'

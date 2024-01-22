@@ -21,7 +21,11 @@ export class Popup implements IPopup {
     this._original = new aimap.Popup({
       ...defaultOpt,
       ...opt,
-      offset: opt.offset ? [opt.offset.x, opt.offset.y] : undefined,
+      offset: opt.offset
+        ? Array.isArray(opt.offset)
+          ? opt.offset
+          : [opt.offset.x, opt.offset.y]
+        : undefined,
     })
   }
 

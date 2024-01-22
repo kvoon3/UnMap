@@ -110,12 +110,7 @@ function renderMarker(map: IMap) {
       .setLngLat(mockLngLats.Shanghai)
       .setPopup(
         unMap
-          .Popup({
-            offset: {
-              x: 0,
-              y: 0
-            }
-          })
+          .Popup({ offset: unMap.Point(0, 0) })
           .setDOMContent(popupContainer)
       )
       .addTo(map)

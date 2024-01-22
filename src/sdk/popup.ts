@@ -2,8 +2,8 @@ import type { IEvented } from '../sdk/evented'
 import type { ILngLat } from '../base'
 import type { WhichMap } from '../map'
 import type { IAnchor } from '../base/anchor'
-import type { IPointLike } from '../base/point'
 import type { IMap } from './map'
+import type { IPointLike } from './point'
 
 export interface IPopupOption {
   // TODO: handler anchor

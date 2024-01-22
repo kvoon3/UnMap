@@ -1,9 +1,10 @@
-import type { ILineStringOption, IMapOption, IMarkerOption, IPopupOption, ISDK } from '../../sdk'
+import type { ILineStringOption, IMapOption, IMarkerOption, IPoint, IPopupOption, ISDK } from '../../sdk'
 import type { LoadUrlItem } from '../../base'
 import { Marker } from './marker'
 import { Map } from './map'
 import { Popup } from './popup'
 import { LineString } from './lingString'
+import { Point } from './point'
 
 export class AMapSDK implements ISDK {
   Popup(opt: IPopupOption) {
@@ -20,6 +21,10 @@ export class AMapSDK implements ISDK {
 
   LineString(opt: ILineStringOption) {
     return new LineString(opt)
+  }
+
+  Point(x: number, y: number): IPoint {
+    return new Point(x, y)
   }
 
   load(loadUrls: LoadUrlItem[]): Promise<HTMLScriptElement | HTMLLinkElement>[] {

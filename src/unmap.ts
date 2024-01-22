@@ -61,6 +61,13 @@ export class UnMap {
     return this.sdk.LineString(opt)
   }
 
+  Point(x: number, y: number) {
+    if (!this.sdk)
+      throw new Error('sdk not loaded')
+
+    return this.sdk.Point(x, y)
+  }
+
   load(loadUrls: LoadUrlItem[]) {
     if (!this.sdk)
       throw new Error('sdk not loaded')
