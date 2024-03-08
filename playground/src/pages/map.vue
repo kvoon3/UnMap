@@ -13,7 +13,6 @@ const map = shallowRef<IMap | undefined>(undefined)
 
 const marker = shallowRef<IMarker | undefined>(undefined)
 const lineString = shallowRef<ILineString | undefined>(undefined)
-
 const mapName = computed(() =>
   whichMap.value === WhichMap.AMap
     ? 'AMap'
@@ -82,7 +81,6 @@ function renderMarker(map: IMap) {
     consola.log('marker.value.getPopup()', marker.value.getPopup())
   }
 
-
   // @ts-expect-error type error
   window.onMarkerClick = onClick
 
@@ -105,7 +103,7 @@ function renderMarker(map: IMap) {
 
     marker.value = unMap
       .Marker({
-        element: personMarkerContainer,
+        // element: personMarkerContainer,
       })
       .setLngLat(mockLngLats.Shanghai)
       .setPopup(
@@ -114,6 +112,7 @@ function renderMarker(map: IMap) {
           .setDOMContent(popupContainer)
       )
       .addTo(map)
+      .togglePopup()
 
     const markerLngLat = marker.value?.getLngLat()
     consola.log('markerLngLat', markerLngLat)
@@ -162,6 +161,34 @@ function onMapReady(m: IMap) {
   consola.log('current map center', res)
 
   traceAllMapEvent(m)
+
+  // unproject
+  m.on('click', (e: { point: { x: number, y: number } }) => {
+    consola.log('e', e)
+    const res = m.unproject([e.point.x, e.point.y])
+    consola.log('lnglat', res)
+  })
+
+  // getContainer
+  m.on('click', () => {
+    consola.log('map container', m.getContainer())
+    consola.log('canvas container', m.getCanvasContainer())
+    consola.log('canvas', m.getCanvas())
+  })
+
+  let bounds: any = []
+  m.on('click', (e: { lngLat: { lng: number, lat: number } }) => {
+    if (bounds.length >= 2) {
+      consola.log('run fit bounds', bounds)
+      m.fitBounds(bounds)
+      bounds = []
+    }
+    else {
+      const corner = [e.lngLat.lng, e.lngLat.lat]
+      consola.log('corner', corner)
+      bounds.push(corner)
+    }
+  })
 }
 
 function onMarkerReady(m: IMarker) {

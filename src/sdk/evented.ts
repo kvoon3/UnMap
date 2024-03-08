@@ -1,5 +1,6 @@
 import type { ILngLat } from '../base'
 import type { IMap } from './map'
+import type { IPoint } from './point'
 
 export interface IEventedOption {
   // LngLat?: Array<number>;
@@ -44,7 +45,7 @@ interface IMapMouseEvent extends IEvent<MouseEvent> {
     | 'contextmenu'
 
   // TODO: complete IPoint
-  // point: IPoint;
+  point: IPoint
   lngLat: ILngLat
 
   preventDefault(): void

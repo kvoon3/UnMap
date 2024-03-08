@@ -25,4 +25,9 @@ export interface IMap<o = object> extends IEvented<keyof IMapEventType> {
   flyTo(lnglat: ILngLat): IMap
   remove(): void
   unproject(point: IPointLike): ILngLat
+  project(lnglat: ILngLat): IPointLike
+  getCanvas(): HTMLCanvasElement
+  getCanvasContainer(): HTMLElement
+  getContainer(): HTMLElement
+  fitBounds(bound: [ILngLat, ILngLat]): IMap
 }

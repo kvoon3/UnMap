@@ -4,6 +4,7 @@ import type { IPointLike } from '../../sdk/point'
 import type { IMap, IMapEventType, IMapOption } from '../../sdk'
 import type { ILngLat } from '../../base'
 import { WhichMap } from '../mapType'
+import { Point } from './point'
 
 export class Map implements IMap {
   _whichMap = WhichMap.AiMap
@@ -68,8 +69,35 @@ export class Map implements IMap {
     return [lng, lat]
   }
 
+  project(lnglat: ILngLat) {
+    const { x, y } = this._original.project(lnglat)
+    return new Point(x, y)
+  }
+
+  getCanvas(): HTMLCanvasElement {
+    return this._original.getCanvas()
+  }
+
+  getCanvasContainer(): HTMLElement {
+    return this._original.getContainer()
+  }
+
+  getContainer(): HTMLElement {
+    return this._original.getContainer()
+  }
+
+  fitBounds(bounds: [ILngLat, ILngLat]) {
+    this._original.fitBounds(bounds)
+    return this
+  }
+
   on<E extends keyof IMapEventType>(eventName: E, handler: (ev: IMapEventType[E]) => void) {
-    this._original.on(eventName, handler)
+    const fixMapEvent = (e: any) => {
+      e.target = this
+      return e
+    }
+
+    this._original.on(eventName, e => handler(fixMapEvent(e)))
     return this
   }
 
