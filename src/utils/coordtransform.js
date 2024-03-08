@@ -1,169 +1,129 @@
-import Long from 'long'
-
-const x_PI = Long.string('3.14159265358979324')
-  .multiply(Long.fromValue(3000))
-  .divide(Long.fromValue(180))
-const PI = Long.fromString('3.1415926535897932384626')
-const a = Long.fromValue(6378245.0)
-const ee = Long.fromString('0.00669342162296594323')
-
+var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
+var PI = 3.1415926535897932384626;
+var a = 6378245.0;
+var ee = 0.00669342162296594323;
 /**
- * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
+ * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02) 的转换
  * 即 百度 转 谷歌、高德
+ * @param bd_lng
+ * @param bd_lat
+ * @returns {*[]}
  */
-function bd09togcj02(bd_lat, bd_lon) {
-  bd_lon = Long.fromValue(bd_lon)
-  bd_lat = Long.fromValue(bd_lat)
-  const x = bd_lon.subtract(Long.fromValue(0.0065))
-  const y = bd_lat.subtract(Long.fromValue(0.006))
-  const z = x.multiply(x).add(y.multiply(y)).sqrt().subtract(Long.fromValue(0.00002).multiply(y.multiply(x_PI).sin()))
-  const theta = y.divide(x).atan2().subtract(Long.fromValue(0.000003).multiply(x.multiply(x_PI).cos()))
-  const gg_lng = z.multiply(theta.cos())
-  const gg_lat = z.multiply(theta.sin())
-  return [gg_lat.toNumber(), gg_lng.toNumber()]
-}
+var bd09togcj02 = function bd09togcj02(bd_lng, bd_lat) {
+  var bd_lng = +bd_lng;
+  var bd_lat = +bd_lat;
+  var x = bd_lng - 0.0065;
+  var y = bd_lat - 0.006;
+  var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_PI);
+  var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_PI);
+  var gg_lng = z * Math.cos(theta);
+  var gg_lat = z * Math.sin(theta);
+  return [gg_lng, gg_lat]
+};
 
 /**
  * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换
- * 即谷歌、高德 转 百度
+ * 即 谷歌、高德 转 百度
+ * @param lng
+ * @param lat
+ * @returns {*[]}
  */
-function gcj02tobd09(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  const z = lng.multiply(lng).add(lat.multiply(lat)).sqrt().add(Long.fromValue(0.00002).multiply(lat.multiply(x_PI).sin()))
-  const theta = lat.divide(lng).atan2().add(Long.fromValue(0.000003).multiply(lng.multiply(x_PI).cos()))
-  const bd_lng = z.multiply(theta.cos()).add(Long.fromValue(0.0065))
-  const bd_lat = z.multiply(theta.sin()).add(Long.fromValue(0.006))
-  return [bd_lat.toNumber(), bd_lng.toNumber()]
-}
+var gcj02tobd09 = function gcj02tobd09(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  var z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * x_PI);
+  var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
+  var bd_lng = z * Math.cos(theta) + 0.0065;
+  var bd_lat = z * Math.sin(theta) + 0.006;
+  return [bd_lng, bd_lat]
+};
 
 /**
- * WGS84转GCj02
+ * WGS-84 转 GCJ-02
+ * @param lng
+ * @param lat
+ * @returns {*[]}
  */
-function wgs84togcj02(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  if (out_of_china(lat, lng)) {
-    return [lat.toNumber(), lng.toNumber()]
+var wgs84togcj02 = function wgs84togcj02(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  if (out_of_china(lng, lat)) {
+    return [lng, lat]
+  } else {
+    var dlat = transformlat(lng - 105.0, lat - 35.0);
+    var dlng = transformlng(lng - 105.0, lat - 35.0);
+    var radlat = lat / 180.0 * PI;
+    var magic = Math.sin(radlat);
+    magic = 1 - ee * magic * magic;
+    var sqrtmagic = Math.sqrt(magic);
+    dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+    dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+    var mglat = lat + dlat;
+    var mglng = lng + dlng;
+    return [mglng, mglat]
   }
-  else {
-    let dlat = transformlat(lat.subtract(Long.fromValue(35)), lng.subtract(Long.fromValue(105)))
-    let dlng = transformlng(lat.subtract(Long.fromValue(35)), lng.subtract(Long.fromValue(105)))
-    const radlat = lat.divide(Long.fromValue(180)).multiply(PI)
-    let magic = radlat.sin()
-    magic = Long.fromValue(1).subtract(ee.multiply(magic).multiply(magic))
-    const sqrtmagic = magic.sqrt()
-    dlat = dlat.multiply(Long.fromValue(180)).divide(a.multiply(Long.fromValue(1).subtract(ee))).divide(magic.multiply(sqrtmagic)).multiply(PI)
-    dlng = dlng.multiply(Long.fromValue(180)).divide(a.divide(sqrtmagic).multiply(radlat.cos())).multiply(PI)
-    const mglat = lat.add(dlat)
-    const mglng = lng.add(dlng)
-    return [mglat.toNumber(), mglng.toNumber()]
-  }
-}
+};
 
 /**
- * GCJ02 转换为 WGS84
+ * GCJ-02 转换为 WGS-84
+ * @param lng
+ * @param lat
+ * @returns {*[]}
  */
-function gcj02towgs84(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  if (out_of_china(lat.toNumber(), lng.toNumber())) {
-    return [lat.toNumber(), lng.toNumber()]
+var gcj02towgs84 = function gcj02towgs84(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  if (out_of_china(lng, lat)) {
+    return [lng, lat]
+  } else {
+    var dlat = transformlat(lng - 105.0, lat - 35.0);
+    var dlng = transformlng(lng - 105.0, lat - 35.0);
+    var radlat = lat / 180.0 * PI;
+    var magic = Math.sin(radlat);
+    magic = 1 - ee * magic * magic;
+    var sqrtmagic = Math.sqrt(magic);
+    dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
+    dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
+    var mglat = lat + dlat;
+    var mglng = lng + dlng;
+    return [lng * 2 - mglng, lat * 2 - mglat]
   }
-  else {
-    let dlat = transformlat(lat.subtract(Long.fromValue(35)), lng.subtract(Long.fromValue(105)))
-    let dlng = transformlng(lat.subtract(Long.fromValue(35)), lng.subtract(Long.fromValue(105)))
-    const radlat = lat.divide(Long.fromValue(180)).multiply(PI)
-    let magic = radlat.sin()
-    magic = Long.fromValue(1).subtract(ee.multiply(magic).multiply(magic))
-    const sqrtmagic = magic.sqrt()
-    dlat = dlat.multiply(Long.fromValue(180)).divide(a.multiply(Long.fromValue(1).subtract(ee))).divide(magic.multiply(sqrtmagic)).multiply(PI)
-    dlng = dlng.multiply(Long.fromValue(180)).divide(a.divide(sqrtmagic).multiply(radlat.cos())).multiply(PI)
-    const mglat = lat.add(dlat)
-    const mglng = lng.add(dlng)
-    return [lat.multiply(Long.fromValue(2)).subtract(mglat).toNumber(), lng.multiply(Long.fromValue(2)).subtract(mglng).toNumber()]
-  }
-}
+};
 
-function transformlat(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  let ret = Long.fromValue(-100.0)
-    .add(Long.fromValue(2.0).multiply(lng))
-    .add(Long.fromValue(3.0).multiply(lat))
-    .add(Long.fromValue(0.2).multiply(lat).multiply(lat))
-    .add(Long.fromValue(0.1).multiply(lng).multiply(lat))
-    .add(Long.fromValue(0.2).multiply(Math.sqrt(Math.abs(lng))))
-
-  ret = ret.add(
-    Long.fromValue(20.0)
-      .multiply(Math.sin(Long.fromValue(6.0).multiply(lng).multiply(PI)))
-      .add(Long.fromValue(20.0).multiply(Math.sin(Long.fromValue(2.0).multiply(lng).multiply(PI))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
-  ret = ret.add(
-    Long.fromValue(20.0)
-      .multiply(Math.sin(lat.multiply(PI)))
-      .add(Long.fromValue(40.0).multiply(Math.sin(lat.divide(Long.fromValue(3.0)).multiply(PI))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
-  ret = ret.add(
-    Long.fromValue(160.0)
-      .multiply(Math.sin(lat.divide(Long.fromValue(12.0)).multiply(PI)))
-      .add(Long.fromValue(320.0).multiply(Math.sin(lat.multiply(PI).divide(Long.fromValue(30.0)))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
+var transformlat = function transformlat(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  var ret = -100.0 + 2.0 * lng + 3.0 * lat + 0.2 * lat * lat + 0.1 * lng * lat + 0.2 * Math.sqrt(Math.abs(lng));
+  ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(lat * PI) + 40.0 * Math.sin(lat / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (160.0 * Math.sin(lat / 12.0 * PI) + 320 * Math.sin(lat * PI / 30.0)) * 2.0 / 3.0;
   return ret
-}
+};
 
-function transformlng(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  let ret = Long.fromValue(300.0)
-    .add(lng)
-    .add(Long.fromValue(2.0).multiply(lat))
-    .add(Long.fromValue(0.1).multiply(lng).multiply(lng))
-    .add(Long.fromValue(0.1).multiply(lng).multiply(lat))
-    .add(Long.fromValue(0.1).multiply(Math.sqrt(Math.abs(lng))))
-
-  ret = ret.add(
-    Long.fromValue(20.0)
-      .multiply(Math.sin(Long.fromValue(6.0).multiply(lng).multiply(PI)))
-      .add(Long.fromValue(20.0).multiply(Math.sin(Long.fromValue(2.0).multiply(lng).multiply(PI))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
-  ret = ret.add(
-    Long.fromValue(20.0)
-      .multiply(Math.sin(lat.multiply(PI)))
-      .add(Long.fromValue(40.0).multiply(Math.sin(lat.divide(Long.fromValue(3.0)).multiply(PI))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
-  ret = ret.add(
-    Long.fromValue(150.0)
-      .multiply(Math.sin(lat.divide(Long.fromValue(12.0)).multiply(PI)))
-      .add(Long.fromValue(300.0).multiply(Math.sin(lat.divide(Long.fromValue(30.0)).multiply(PI))))
-      .multiply(Long.fromValue(2.0 / 3.0)),
-  )
-
-  return ret.toNumber()
-}
+var transformlng = function transformlng(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  var ret = 300.0 + lng + 2.0 * lat + 0.1 * lng * lng + 0.1 * lng * lat + 0.1 * Math.sqrt(Math.abs(lng));
+  ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(lng * PI) + 40.0 * Math.sin(lng / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (150.0 * Math.sin(lng / 12.0 * PI) + 300.0 * Math.sin(lng / 30.0 * PI)) * 2.0 / 3.0;
+  return ret
+};
 
 /**
  * 判断是否在国内，不在国内则不做偏移
+ * @param lng
+ * @param lat
+ * @returns {boolean}
  */
-function out_of_china(lat, lng) {
-  lat = Long.fromValue(lat)
-  lng = Long.fromValue(lng)
-  // 纬度3.86~53.55,经度73.66~135.05
-  return !(lng.greaterThan(73.66) && lng.lessThan(135.05) && lat.greaterThan(3.86) && lat.lessThan(53.55))
-}
+var out_of_china = function out_of_china(lng, lat) {
+  var lat = +lat;
+  var lng = +lng;
+  // 纬度 3.86~53.55, 经度 73.66~135.05 
+  return !(lng > 73.66 && lng < 135.05 && lat > 3.86 && lat < 53.55);
+};
 
-export default {
+export {
   bd09togcj02,
   gcj02tobd09,
   wgs84togcj02,
