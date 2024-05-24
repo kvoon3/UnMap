@@ -10,9 +10,16 @@ export class Map implements IMap {
   _whichMap = WhichMap.AiMap
   _original: mapboxgl.Map
   _id: string
+  _loaded: boolean = false
+  get loaded() {
+    return this._loaded
+  }
+
   constructor(opt: IMapOption) {
     this._id = nanoid()
     this._original = new aimap.Map(opt)
+
+    this.on('load', () => this._loaded = true)
   }
 
   remove(): void {
@@ -86,8 +93,8 @@ export class Map implements IMap {
     return this._original.getContainer()
   }
 
-  fitBounds(bounds: [ILngLat, ILngLat]) {
-    this._original.fitBounds(bounds)
+  fitBounds(bounds: [ILngLat, ILngLat], options: { padding: number }) {
+    this._original.fitBounds(bounds, options)
     return this
   }
 

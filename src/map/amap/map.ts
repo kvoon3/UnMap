@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import type { ILngLat } from '../../base'
-import type { IMap, IMapEventType, IMapOption } from '../../sdk'
+import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
 import { IMapEvent2AMapEvent } from '../../utils'
 import { WhichMap } from '..'
 import type { IPointLike } from '../../sdk/point'
@@ -10,6 +10,12 @@ export class Map implements IMap {
   _whichMap = WhichMap.AMap
   _original: AMap.Map
   _id: string
+  _loaded: boolean = false
+
+  get loaded() {
+    return this._loaded
+  }
+
   constructor(opt: IMapOption) {
     const zooms: [number, number] = [opt.minZoom || 2, opt.maxZoom || 30]
 
@@ -19,6 +25,8 @@ export class Map implements IMap {
       ...opt,
       zooms,
     })
+
+    this.on('load', () => this._loaded = true)
   }
 
   remove(): void {
@@ -102,7 +110,7 @@ export class Map implements IMap {
     return this._original.getContainer()
   }
 
-  fitBounds(bounds: [ILngLat, ILngLat]) {
+  fitBounds(bounds: [ILngLat, ILngLat], options?: IFitBoundsOptions) {
     const [southWest, northEast] = bounds
     this._original.setBounds(
       new AMap.Bounds(
@@ -110,6 +118,7 @@ export class Map implements IMap {
         new AMap.LngLat(...northEast),
       ),
       true,
+      Array.from({ length: 4 }).map(() => options?.padding ? options.padding : 0),
     )
     return this
   }

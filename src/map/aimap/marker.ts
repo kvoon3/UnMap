@@ -10,10 +10,10 @@ export class Marker implements IMarker {
   _original: mapboxgl.Marker
   _whichMap = WhichMap.AiMap
   popup: IPopup | undefined
-  constructor(opt: IMarkerOption) {
+  constructor(opt: IMarkerOption = {}) {
     this._id = nanoid()
 
-    const element = opt.element === undefined
+    const element = opt?.element === undefined
       ? opt.element
       : handleContainer(opt.element)
 
