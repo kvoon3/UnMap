@@ -1,4 +1,4 @@
-import type { IMap, IMarker } from '@kvoon3/unmap'
+import type { IMap, IMarker } from '@kvoon/unmap'
 
 export function traceAllMapEvent(m: IMap) {
   const evtLog = (e: any) => consola.withTag('Map Event').trace('e', e)

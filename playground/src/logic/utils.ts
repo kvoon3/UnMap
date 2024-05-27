@@ -1,4 +1,4 @@
-import type { UnMap } from '@kvoon3/unmap'
+import type { UnMap } from '@kvoon/unmap'
 import type { MaybeRef } from 'vue'
 import { isAMapSDKLoaded, isAiMapSDKLoaded } from './state'
 
