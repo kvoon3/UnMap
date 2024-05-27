@@ -42,7 +42,7 @@
     "play": "nr -C playground dev",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "nr build",
-    "release": "bumpp && pnpm -r publish",
+    "release": "bumpp && pnpm publish",
     "start": "esno src/index.ts",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit"
