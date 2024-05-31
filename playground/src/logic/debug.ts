@@ -24,7 +24,6 @@ export function traceAllMapEvent(m: IMap) {
 export function traceAllMarkerEvent(m: IMarker) {
   const evtLog = (e: any) => consola.withTag('Marker Event').trace('e', e)
 
-  m.on('click', evtLog)
   m.on('drag', evtLog)
   m.on('dragstart', evtLog)
   m.on('dragend', evtLog)

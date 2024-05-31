@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
+import type { MultiPoint } from 'geojson'
 import type { LineString as AiMapLineString } from '../../types/maps'
 import type { ILineString, ILineStringEventType, ILineStringOption, IMap } from '../../sdk'
 import { WhichMap } from '..'
@@ -15,7 +16,7 @@ export class LineString implements ILineString {
     this._original = new aimap.LineString(opt)
   }
 
-  setData(data: ILineStringOption['data']) {
+  setData(data: MultiPoint) {
     this._original.setData(data)
     return this
   }
