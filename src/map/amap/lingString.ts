@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
-import type { MultiPoint } from 'geojson'
 import type { ILineString, ILineStringEventType, ILineStringOption, IMap } from '../../sdk'
 
 import { WhichMap } from '..'
@@ -26,7 +25,7 @@ export class LineString implements ILineString<AMap.Polyline> {
     })
   }
 
-  setData(data: MultiPoint) {
+  setData(data: GeoJSON.MultiPoint) {
     const path = data.coordinates.map(coordinateToAMapLngLat)
     this._original.setPath(path)
     return this
