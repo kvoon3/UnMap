@@ -27,7 +27,7 @@ interface IMapTouchEvent extends IEvent<TouchEvent> {
   lngLat: ILngLat
   lngLats: ILngLat[]
 
-  preventDefault(): void
+  preventDefault: () => void
   defaultPrevented: boolean
 }
 
@@ -48,7 +48,7 @@ interface IMapMouseEvent extends IEvent<MouseEvent> {
   point: IPoint
   lngLat: ILngLat
 
-  preventDefault(): void
+  preventDefault: () => void
   defaultPrevented: boolean
 }
 
@@ -111,7 +111,7 @@ interface ILineStringMouseEvent extends IEvent<MouseEvent> {
   // point: IPoint;
   lngLat: ILngLat
 
-  preventDefault(): void
+  preventDefault: () => void
   defaultPrevented: boolean
 }
 
@@ -123,7 +123,7 @@ export interface ILineStringEventType {
   mousemove: ILineStringMouseEvent
 }
 
-export interface IEvented<E = string> {
-  on(eventName: E, handler: Function): this // AddEventListener function，not required
-  off(eventName: E, handler: Function): this // Remove a previously added listener funciton
+export interface IEvented<E extends string> {
+  on: (eventName: E, handler: (...args: any[]) => any) => this // AddEventListener function，not required
+  off: (eventName: E, handler: (...args: any[]) => any) => this // Remove a previously added listener funciton
 }

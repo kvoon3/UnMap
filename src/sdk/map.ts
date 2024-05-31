@@ -15,24 +15,24 @@ export interface IFitBoundsOptions {
   padding: number
 }
 
-export interface IMap<o = object> extends IEvented<keyof IMapEventType> {
+export interface IMap<o = any> extends IEvented<keyof IMapEventType> {
   _whichMap: WhichMap
   _original: o
   _id: string
   get loaded(): boolean
-  setZoom(zoom: number): IMap
-  getZoom(): number
-  zoomIn(): IMap
-  zoomOut(): IMap
-  setCenter(center: ILngLat): IMap
-  getCenter(): ILngLat
-  panTo(lnglat: ILngLat): IMap
-  flyTo(lnglat: ILngLat): IMap
-  remove(): void
-  unproject(point: IPointLike): ILngLat
-  project(lnglat: ILngLat): IPointLike
-  getCanvas(): HTMLCanvasElement
-  getCanvasContainer(): HTMLElement
-  getContainer(): HTMLElement
-  fitBounds(bound: [ILngLat, ILngLat], options?: IFitBoundsOptions): IMap
+  setZoom: (zoom: number) => this
+  getZoom: () => number
+  zoomIn: () => this
+  zoomOut: () => this
+  setCenter: (center: ILngLat) => this
+  getCenter: () => ILngLat
+  panTo: (lnglat: ILngLat) => this
+  flyTo: (lnglat: ILngLat) => this
+  remove: () => void
+  unproject: (point: IPointLike) => ILngLat
+  project: (lnglat: ILngLat) => IPointLike
+  getCanvas: () => HTMLCanvasElement
+  getCanvasContainer: () => HTMLElement
+  getContainer: () => HTMLElement
+  fitBounds: (bound: [ILngLat, ILngLat], options?: IFitBoundsOptions) => this
 }

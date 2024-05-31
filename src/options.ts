@@ -21,7 +21,7 @@ export interface IViewportOption {
 
 export interface IEventListenerOptions {
   eventName: string
-  host: IEvented
+  host: IEvented<string>
   handler?: Function // one of them must be set (handler | listener)
   listener?: any
 }

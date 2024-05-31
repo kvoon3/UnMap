@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
 import type { IPointLike } from '../../sdk/point'
-import type { IMap, IMapEventType, IMapOption } from '../../sdk'
+import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
 import type { ILngLat } from '../../base'
 import { WhichMap } from '../mapType'
 import { Point } from './point'
 
-export class Map implements IMap {
+export class Map implements IMap<mapboxgl.Map> {
   _whichMap = WhichMap.AiMap
   _original: mapboxgl.Map
   _id: string
@@ -93,7 +93,7 @@ export class Map implements IMap {
     return this._original.getContainer()
   }
 
-  fitBounds(bounds: [ILngLat, ILngLat], options: { padding: number }) {
+  fitBounds(bounds: [ILngLat, ILngLat], options?: IFitBoundsOptions) {
     this._original.fitBounds(bounds, options)
     return this
   }

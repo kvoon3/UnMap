@@ -1,5 +1,5 @@
 import type { ILineStyle, ILngLat } from '../base'
-import type { IEvented, WhichMap } from '..'
+import type { IEvented, ILineStringEventType, WhichMap } from '..'
 import type { IMap } from './map'
 
 export interface ILineStringOption {
@@ -11,13 +11,13 @@ export interface ILineStringOption {
   style: ILineStyle
 }
 
-export interface ILineString<o = object> extends IEvented {
+export interface ILineString<o = object> extends IEvented<keyof ILineStringEventType> {
   _id: string
   _original: o
   _whichMap: WhichMap
-  setData(data: ILineStringOption['data']): ILineString
-  remove(): void
-  addTo(map: IMap): ILineString
-  show(): ILineString
-  hide(): ILineString
+  setData: (data: ILineStringOption['data']) => this
+  remove: () => void
+  addTo: (map: IMap) => this
+  show: () => this
+  hide: () => this
 }

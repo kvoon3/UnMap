@@ -9,22 +9,25 @@ export class Popup implements IPopup {
   _original: mapboxgl.Popup
   _whichMap = WhichMap.AiMap
   _domContent: HTMLElement | undefined
-  constructor(opt: IPopupOption) {
+  constructor(opt?: IPopupOption) {
     this._id = nanoid()
 
-    const defaultOpt: mapboxgl.PopupOptions = {
-      closeOnClick: true,
-      anchor: 'bottom',
-      offset: undefined,
-    }
+    const {
+      anchor = 'bottom',
+      offset = undefined,
+      className = '',
+      maxWidth = '',
+    } = opt || {}
 
     this._original = new aimap.Popup({
-      ...defaultOpt,
-      ...opt,
-      offset: opt.offset
-        ? Array.isArray(opt.offset)
-          ? opt.offset
-          : [opt.offset.x, opt.offset.y]
+      closeButton: true,
+      anchor,
+      className,
+      maxWidth,
+      offset: offset
+        ? Array.isArray(offset)
+          ? offset
+          : [offset.x, offset.y]
         : undefined,
     })
   }

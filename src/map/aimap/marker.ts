@@ -27,12 +27,12 @@ export class Marker implements IMarker {
     return this._original.getRotation()
   }
 
-  setRotation(rotate: number): IMarker {
+  setRotation(rotate: number) {
     this._original.setRotation(rotate)
     return this
   }
 
-  setLngLat(lnglat: ILngLat): IMarker {
+  setLngLat(lnglat: ILngLat) {
     this._original.setLngLat(lnglat)
     return this
   }
@@ -42,17 +42,17 @@ export class Marker implements IMarker {
     return [lng, lat]
   }
 
-  addTo(map: IMap<mapboxgl.Map>): IMarker {
-    this._original.addTo(map._original)
+  addTo(map: IMap) {
+    this._original.addTo(map._original as mapboxgl.Map)
     return this
   }
 
-  remove(): IMarker {
+  remove() {
     this._original.remove()
     return this
   }
 
-  setPopup(popup: IPopup<mapboxgl.Popup>): IMarker {
+  setPopup(popup: IPopup<mapboxgl.Popup>) {
     this._original.setPopup(popup._original)
     this.popup = popup
     return this
@@ -62,7 +62,7 @@ export class Marker implements IMarker {
     return this.popup
   }
 
-  togglePopup(): IMarker {
+  togglePopup() {
     this._original.togglePopup()
     return this
   }

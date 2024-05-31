@@ -1,7 +1,7 @@
 import type { ILngLat } from '../base'
 import type { IAnchor } from '../base/anchor'
 import type { WhichMap } from '../map'
-import type { IEvented } from './evented'
+import type { IEvented, IMarkerEventType } from './evented'
 import type { IMap } from './map'
 import type { IPopup } from './popup'
 
@@ -18,18 +18,18 @@ export interface IMarkerOption {
   raiseOnDrag?: boolean
 }
 
-export interface IMarker<o = object> extends IEvented {
+export interface IMarker<o = any> extends IEvented<keyof IMarkerEventType> {
   _id: string
   _original: o
   _whichMap: WhichMap
   popup: IPopup | undefined
-  setLngLat(lnglat: ILngLat): IMarker
-  getLngLat(): ILngLat
-  addTo(map: IMap): IMarker
-  remove(): IMarker
-  setRotation(rotate: number): IMarker
-  getRotation(): number
-  setPopup(popup: IPopup): IMarker
-  getPopup(): IPopup | undefined
-  togglePopup(): IMarker
+  setLngLat: (lnglat: ILngLat) => this
+  getLngLat: () => ILngLat
+  addTo: (map: IMap<any>) => this
+  remove: () => this
+  setRotation: (rotate: number) => this
+  getRotation: () => number
+  setPopup: (popup: IPopup<any>) => this
+  getPopup: () => IPopup | undefined
+  togglePopup: () => this
 }

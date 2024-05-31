@@ -7,6 +7,6 @@ export interface MapType {
 }
 
 export enum WhichMap {
-  'AMap', // 高德
-  'AiMap', // 维智
+  AMap, // 高德
+  AiMap, // 维智
 }

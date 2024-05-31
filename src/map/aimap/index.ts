@@ -11,11 +11,11 @@ export class AiMapSDK implements ISDK {
     return new Map(opt)
   }
 
-  Popup(opt: IPopupOption) {
+  Popup(opt?: IPopupOption) {
     return new Popup(opt)
   }
 
-  Marker(opt: IMarkerOption): IMarker {
+  Marker(opt?: IMarkerOption): IMarker {
     return new Marker(opt)
   }
 

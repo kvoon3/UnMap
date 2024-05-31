@@ -11,7 +11,7 @@ export class Popup implements IPopup {
   _domContent: HTMLElement | undefined
   className: string | undefined
   maxWidth: string | undefined
-  constructor(opt: IPopupOption) {
+  constructor(opt: IPopupOption = {}) {
     this._id = nanoid()
     const offset = opt.offset
       ? Array.isArray(opt.offset)

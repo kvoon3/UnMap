@@ -7,11 +7,11 @@ import { LineString } from './lingString'
 import { Point } from './point'
 
 export class AMapSDK implements ISDK {
-  Popup(opt: IPopupOption) {
+  Popup(opt?: IPopupOption) {
     return new Popup(opt)
   }
 
-  Marker(opt: IMarkerOption) {
+  Marker(opt?: IMarkerOption) {
     return new Marker(opt)
   }
 

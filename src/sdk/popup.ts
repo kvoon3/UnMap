@@ -13,16 +13,16 @@ export interface IPopupOption {
   maxWidth?: string
 }
 
-export interface IPopup<o = object> extends IEvented {
+export interface IPopup<o = object> extends IEvented<string> {
   _id: string
   _original: o
   _whichMap: WhichMap
   _domContent: HTMLElement | undefined
-  isOpen(): boolean
-  setDOMContent(maybeHtmlNode: HTMLElement | string): IPopup
-  getElement(): HTMLElement | undefined
-  addTo(map: IMap): IPopup
-  remove(): void
-  setLngLat(lnglat: ILngLat): IPopup
-  getLngLat(): ILngLat
+  isOpen: () => boolean
+  setDOMContent: (maybeHtmlNode: HTMLElement | string) => IPopup
+  getElement: () => HTMLElement | undefined
+  addTo: (map: IMap) => IPopup
+  remove: () => void
+  setLngLat: (lnglat: ILngLat) => IPopup
+  getLngLat: () => ILngLat
 }

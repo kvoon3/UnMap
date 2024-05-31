@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
 import type { LineString as AiMapLineString } from '../../types/maps'
-import type { ILineString, ILineStringOption, IMap, IMarkerEventType } from '../../sdk'
+import type { ILineString, ILineStringEventType, ILineStringOption, IMap } from '../../sdk'
 import { WhichMap } from '..'
 
 export class LineString implements ILineString {
@@ -15,7 +15,7 @@ export class LineString implements ILineString {
     this._original = new aimap.LineString(opt)
   }
 
-  setData(data: ILineStringOption['data']): ILineString {
+  setData(data: ILineStringOption['data']) {
     this._original.setData(data)
     return this
   }
@@ -24,32 +24,32 @@ export class LineString implements ILineString {
     this._original.remove()
   }
 
-  addTo(map: IMap): ILineString {
+  addTo(map: IMap) {
     this._original.addTo(map._original)
     return this
   }
 
-  show(): ILineString {
+  show() {
     this._original.show()
     return this
   }
 
-  hide(): ILineString {
+  hide() {
     this._original.hide()
     return this
   }
 
-  on<E extends keyof IMarkerEventType>(
+  on<E extends keyof ILineStringEventType>(
     eventName: E,
-    handler: (ev: IMarkerEventType[E]) => void,
+    handler: (ev: ILineStringEventType[E]) => void,
   ) {
     this._original.on(eventName, handler as mapboxgl.EventedListener)
     return this
   }
 
-  off<E extends keyof IMarkerEventType>(
+  off<E extends keyof ILineStringEventType>(
     eventName: E,
-    handler: (ev: IMarkerEventType[E]) => void,
+    handler: (ev: ILineStringEventType[E]) => void,
   ) {
     this._original.on(eventName, handler as mapboxgl.EventedListener)
     return this

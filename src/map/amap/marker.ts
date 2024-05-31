@@ -29,7 +29,7 @@ export class Marker implements IMarker {
   private _initState: InitState
   popup: IPopup | undefined
   isPopupOpen: boolean = false
-  constructor(opt: IMarkerOption) {
+  constructor(opt: IMarkerOption = {}) {
     this._id = nanoid()
 
     const anchor = IAnchor2AMapAnchor[opt.anchor || 'center']
@@ -58,7 +58,7 @@ export class Marker implements IMarker {
     return this._initState
   }
 
-  setLngLat(lnglat: ILngLat): IMarker {
+  setLngLat(lnglat: ILngLat) {
     this._original.setPosition(lnglat)
     return this
   }
@@ -73,17 +73,17 @@ export class Marker implements IMarker {
     return [lng, lat]
   }
 
-  addTo(map: IMap<AMap.Map>): IMarker {
+  addTo(map: IMap<AMap.Map>) {
     map._original.add(this._original)
     return this
   }
 
-  remove(): IMarker {
+  remove() {
     this._original.remove()
     return this
   }
 
-  setRotation(rotate: number): IMarker {
+  setRotation(rotate: number) {
     this._original.setAngle(rotate)
     return this
   }
@@ -106,7 +106,7 @@ export class Marker implements IMarker {
     return this.popup
   }
 
-  togglePopup(): IMarker {
+  togglePopup() {
     if (!this.popup)
       throw new Error('not set popup')
 

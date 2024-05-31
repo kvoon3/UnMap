@@ -5,7 +5,7 @@ import type { ILineString, ILineStringEventType, ILineStringOption, IMap } from 
 import { WhichMap } from '..'
 import { IMapEvent2AMapEvent, coordinateToAMapLngLat, omit } from '../../utils'
 
-export class LineString implements ILineString {
+export class LineString implements ILineString<AMap.Polyline> {
   _id: string
   _original: AMap.Polyline
   _whichMap = WhichMap.AMap
@@ -25,7 +25,7 @@ export class LineString implements ILineString {
     })
   }
 
-  setData(data: ILineStringOption['data']): ILineString {
+  setData(data: ILineStringOption['data']) {
     const path = data.coordinates.map(coordinateToAMapLngLat)
     this._original.setPath(path)
     return this
@@ -35,17 +35,17 @@ export class LineString implements ILineString {
     this._original.remove()
   }
 
-  addTo(map: IMap<AMap.Map>): ILineString {
+  addTo(map: IMap<AMap.Map>) {
     map._original.add(this._original)
     return this
   }
 
-  show(): ILineString {
+  show() {
     this._original.show()
     return this
   }
 
-  hide(): ILineString {
+  hide() {
     this._original.hide()
     return this
   }

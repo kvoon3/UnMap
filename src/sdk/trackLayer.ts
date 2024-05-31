@@ -49,12 +49,12 @@ export interface ISubTrackPointLayerOption {
   data?: object
 }
 
-export interface ITrackLayer<o = object> extends IEvented {
+export interface ITrackLayer<o = object> extends IEvented<string> {
   _id: string
   _original: o
   _whichMap: WhichMap
-  addTo(map: IMap): ITrackLayer
-  remove(): void
-  play(): ITrackLayer
-  pause(): ITrackLayer
+  addTo: (map: IMap) => ITrackLayer
+  remove: () => void
+  play: () => ITrackLayer
+  pause: () => ITrackLayer
 }
