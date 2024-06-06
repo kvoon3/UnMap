@@ -4,7 +4,7 @@ import type { IMap } from './map'
 
 export interface ILineStringOption {
   name: string
-  data: GeoJSON.MultiPoint
+  data: GeoJSON.LineString
   style: ILineStyle
 }
 
@@ -12,7 +12,7 @@ export interface ILineString<o = object> extends IEvented<keyof ILineStringEvent
   _id: string
   _original: o
   _whichMap: WhichMap
-  setData: (data: GeoJSON.MultiPoint) => this
+  setData: (data: GeoJSON.LineString) => this
   remove: () => void
   addTo: (map: IMap) => this
   show: () => this

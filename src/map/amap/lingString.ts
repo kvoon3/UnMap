@@ -25,7 +25,7 @@ export class LineString implements ILineString<AMap.Polyline> {
     })
   }
 
-  setData(data: GeoJSON.MultiPoint) {
+  setData(data: GeoJSON.LineString) {
     const path = data.coordinates.map(coordinateToAMapLngLat)
     this._original.setPath(path)
     return this

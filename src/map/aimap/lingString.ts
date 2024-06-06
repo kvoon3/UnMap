@@ -15,7 +15,7 @@ export class LineString implements ILineString {
     this._original = new aimap.LineString(opt)
   }
 
-  setData(data: GeoJSON.MultiPoint) {
+  setData(data: GeoJSON.LineString) {
     this._original.setData(data)
     return this
   }
