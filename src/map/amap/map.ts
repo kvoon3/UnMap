@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import type { ILngLat } from '../../base'
+import { type ILngLat, toLnglatArray } from '../../base'
 import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
 import { IMapEvent2AMapEvent } from '../../utils'
 import { WhichMap } from '..'
@@ -18,11 +18,13 @@ export class Map implements IMap {
 
   constructor(opt: IMapOption) {
     const zooms: [number, number] = [opt.minZoom || 2, opt.maxZoom || 30]
+    const center = opt.center ? toLnglatArray(opt.center) : opt.center
 
     this._id = nanoid()
 
     this._original = new AMap.Map(opt.container, {
       ...opt,
+      center,
       zooms,
     })
 
@@ -53,7 +55,9 @@ export class Map implements IMap {
   }
 
   setCenter(center: ILngLat) {
-    this._original.setCenter(new AMap.LngLat(center[0], center[1]), true, 0)
+    const [lng, lat] = Array.isArray(center) ? center : [center.lng, center.lat]
+
+    this._original.setCenter(new AMap.LngLat(lng, lat), true, 0)
     return this
   }
 
@@ -63,7 +67,7 @@ export class Map implements IMap {
   }
 
   panTo(lnglat: ILngLat) {
-    this._original.panTo(lnglat)
+    this._original.panTo(Array.isArray(lnglat) ? lnglat : [lnglat.lng, lnglat.lat])
     return this
   }
 
@@ -79,8 +83,9 @@ export class Map implements IMap {
   }
 
   project(lnglat: ILngLat): IPointLike {
+    const [lng, lat] = Array.isArray(lnglat) ? lnglat : [lnglat.lng, lnglat.lat]
     const { x, y } = this._original.lngLatToContainer(
-      new AMap.LngLat(lnglat[0], lnglat[1]),
+      new AMap.LngLat(lng, lat),
     )
 
     return new Point(x, y)
@@ -114,8 +119,12 @@ export class Map implements IMap {
     const [southWest, northEast] = bounds
     this._original.setBounds(
       new AMap.Bounds(
-        new AMap.LngLat(...southWest),
-        new AMap.LngLat(...northEast),
+        new AMap.LngLat(...(
+          toLnglatArray(southWest)
+        )),
+        new AMap.LngLat(...(
+          toLnglatArray(northEast)
+        )),
       ),
       true,
       Array.from({ length: 4 }).map(() => options?.padding ? options.padding : 0),

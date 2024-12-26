@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import type { ILngLat } from '../../base'
+import { type ILngLat, toLnglatArray } from '../../base'
 import type { IMap, IPopup, IPopupOption } from '../../sdk'
 import { handleContainer, omit } from '../../utils'
 import { WhichMap } from '..'
@@ -51,7 +51,7 @@ export class Popup implements IPopup {
   }
 
   setLngLat(lnglat: ILngLat): IPopup {
-    this._original.setPosition(lnglat)
+    this._original.setPosition(toLnglatArray(lnglat))
     return this
   }
 

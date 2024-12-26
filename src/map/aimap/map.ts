@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
 import type { IPointLike } from '../../sdk/point'
 import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
-import type { ILngLat } from '../../base'
+import { type ILngLat, toLnglatArray } from '../../base'
 import { WhichMap } from '../mapType'
 import { Point } from './point'
 
@@ -46,7 +46,7 @@ export class Map implements IMap<mapboxgl.Map> {
   }
 
   setCenter(center: ILngLat) {
-    this._original.setCenter(new aimap.LngLat(center[0], center[1]))
+    this._original.setCenter(new aimap.LngLat(...toLnglatArray(center)))
     return this
   }
 
