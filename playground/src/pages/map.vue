@@ -124,7 +124,7 @@ function renderLineString(map: IMap) {
   lineString.value = unMap.LineString({
     name: 'theLineString',
     data: {
-      type: 'Point',
+      type: 'LineString',
       coordinates: [
         mockLngLats.Peking,
         mockLngLats.Shanghai,
