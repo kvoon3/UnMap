@@ -1,4 +1,4 @@
-import type { ILngLat } from '../base'
+import type { ILnglatLike } from '../base'
 import type { IAnchor } from '../base/anchor'
 import type { WhichMap } from '../map'
 import type { IEvented, IMarkerEventType } from './evented'
@@ -23,8 +23,8 @@ export interface IMarker<o = any> extends IEvented<keyof IMarkerEventType> {
   _original: o
   _whichMap: WhichMap
   popup: IPopup | undefined
-  setLngLat: (lnglat: ILngLat) => this
-  getLngLat: () => ILngLat
+  setLngLat: (lnglat: ILnglatLike) => this
+  getLngLat: () => ILnglatLike
   addTo: (map: IMap<any>) => this
   remove: () => this
   setRotation: (rotate: number) => this

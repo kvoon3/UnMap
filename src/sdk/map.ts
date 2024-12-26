@@ -1,4 +1,4 @@
-import type { ILngLat } from '../base'
+import type { ILnglatLike } from '../base'
 import type { WhichMap } from '../map'
 import type { IPointLike } from './point'
 import type { IEvented, IMapEventType } from './evented'
@@ -6,7 +6,7 @@ import type { IEvented, IMapEventType } from './evented'
 export interface IMapOption {
   container: string | HTMLDivElement
   zoom?: number
-  center?: ILngLat
+  center?: ILnglatLike
   maxZoom?: number
   minZoom?: number
 }
@@ -24,15 +24,15 @@ export interface IMap<o = any> extends IEvented<keyof IMapEventType> {
   getZoom: () => number
   zoomIn: () => this
   zoomOut: () => this
-  setCenter: (center: ILngLat) => this
-  getCenter: () => ILngLat
-  panTo: (lnglat: ILngLat) => this
-  flyTo: (lnglat: ILngLat) => this
+  setCenter: (center: ILnglatLike) => this
+  getCenter: () => ILnglatLike
+  panTo: (lnglat: ILnglatLike) => this
+  flyTo: (lnglat: ILnglatLike) => this
   remove: () => void
-  unproject: (point: IPointLike) => ILngLat
-  project: (lnglat: ILngLat) => IPointLike
+  unproject: (point: IPointLike) => ILnglatLike
+  project: (lnglat: ILnglatLike) => IPointLike
   getCanvas: () => HTMLCanvasElement
   getCanvasContainer: () => HTMLElement
   getContainer: () => HTMLElement
-  fitBounds: (bound: [ILngLat, ILngLat], options?: IFitBoundsOptions) => this
+  fitBounds: (bound: [ILnglatLike, ILnglatLike], options?: IFitBoundsOptions) => this
 }

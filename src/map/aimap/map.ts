@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
 import type { IPointLike } from '../../sdk/point'
 import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
-import { type ILngLat, toLnglatArray } from '../../base'
+import { type ILnglatLike, toLnglat } from '../../base'
 import { WhichMap } from '../mapType'
 import { Point } from './point'
 
@@ -45,28 +45,28 @@ export class Map implements IMap<mapboxgl.Map> {
     return this
   }
 
-  setCenter(center: ILngLat) {
-    this._original.setCenter(new aimap.LngLat(...toLnglatArray(center)))
+  setCenter(center: ILnglatLike) {
+    this._original.setCenter(new aimap.LngLat(...toLnglat(center)))
     return this
   }
 
-  getCenter(): ILngLat {
+  getCenter(): ILnglatLike {
     return this._original.getCenter().toArray() as [number, number]
   }
 
-  panTo(lnglat: ILngLat) {
+  panTo(lnglat: ILnglatLike) {
     this._original.panTo(lnglat)
     return this
   }
 
-  flyTo(lnglat: ILngLat) {
+  flyTo(lnglat: ILnglatLike) {
     this._original.flyTo({
       center: lnglat,
     })
     return this
   }
 
-  unproject(point: IPointLike): ILngLat {
+  unproject(point: IPointLike): ILnglatLike {
     const { lng, lat } = this._original.unproject(
       Array.isArray(point)
         ? point
@@ -76,7 +76,7 @@ export class Map implements IMap<mapboxgl.Map> {
     return [lng, lat]
   }
 
-  project(lnglat: ILngLat) {
+  project(lnglat: ILnglatLike) {
     const { x, y } = this._original.project(lnglat)
     return new Point(x, y)
   }
@@ -93,7 +93,7 @@ export class Map implements IMap<mapboxgl.Map> {
     return this._original.getContainer()
   }
 
-  fitBounds(bounds: [ILngLat, ILngLat], options?: IFitBoundsOptions) {
+  fitBounds(bounds: [ILnglatLike, ILnglatLike], options?: IFitBoundsOptions) {
     this._original.fitBounds(bounds, options)
     return this
   }

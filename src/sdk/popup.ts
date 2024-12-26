@@ -1,5 +1,5 @@
 import type { IEvented } from '../sdk/evented'
-import type { ILngLat } from '../base'
+import type { ILnglatLike } from '../base'
 import type { WhichMap } from '../map'
 import type { IAnchor } from '../base/anchor'
 import type { IMap } from './map'
@@ -23,6 +23,6 @@ export interface IPopup<o = object> extends IEvented<string> {
   getElement: () => HTMLElement | undefined
   addTo: (map: IMap) => IPopup
   remove: () => void
-  setLngLat: (lnglat: ILngLat) => IPopup
-  getLngLat: () => ILngLat
+  setLngLat: (lnglat: ILnglatLike) => IPopup
+  getLngLat: () => ILnglatLike
 }

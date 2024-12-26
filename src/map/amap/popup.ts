@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { type ILngLat, toLnglatArray } from '../../base'
+import { type ILnglatLike, toLnglat } from '../../base'
 import type { IMap, IPopup, IPopupOption } from '../../sdk'
 import { handleContainer, omit } from '../../utils'
 import { WhichMap } from '..'
@@ -50,12 +50,12 @@ export class Popup implements IPopup {
     return this
   }
 
-  setLngLat(lnglat: ILngLat): IPopup {
-    this._original.setPosition(toLnglatArray(lnglat))
+  setLngLat(lnglat: ILnglatLike): IPopup {
+    this._original.setPosition(toLnglat(lnglat))
     return this
   }
 
-  getLngLat(): ILngLat {
+  getLngLat(): ILnglatLike {
     const lnglat = this._original.getPosition()
     if (!lnglat)
       throw new Error('cannot get popup position')

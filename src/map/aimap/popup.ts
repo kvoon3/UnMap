@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import type { IMap, IPopup, IPopupOption } from '../../sdk'
-import type { ILngLat } from '../../base'
+import type { ILnglatLike } from '../../base'
 import { handleContainer } from '../../utils'
 import { WhichMap } from '..'
 
@@ -51,12 +51,12 @@ export class Popup implements IPopup {
     return this
   }
 
-  setLngLat(lnglat: ILngLat) {
+  setLngLat(lnglat: ILnglatLike) {
     this._original.setLngLat(lnglat)
     return this
   }
 
-  getLngLat(): ILngLat {
+  getLngLat(): ILnglatLike {
     const { lng, lat } = this._original.getLngLat()
     return [lng, lat]
   }

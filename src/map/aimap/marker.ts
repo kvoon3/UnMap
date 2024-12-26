@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import type mapboxgl from 'mapbox-gl'
 import type { IMap, IMarker, IMarkerEventType, IMarkerOption, IPopup } from '../../sdk'
-import type { ILngLat } from '../../base'
+import type { ILnglatLike } from '../../base'
 import { WhichMap } from '..'
 import { handleContainer, omit } from '../../utils'
 
@@ -32,12 +32,12 @@ export class Marker implements IMarker {
     return this
   }
 
-  setLngLat(lnglat: ILngLat) {
+  setLngLat(lnglat: ILnglatLike) {
     this._original.setLngLat(lnglat)
     return this
   }
 
-  getLngLat(): ILngLat {
+  getLngLat(): ILnglatLike {
     const { lng, lat } = this._original.getLngLat()
     return [lng, lat]
   }

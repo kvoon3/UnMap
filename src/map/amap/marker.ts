@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import type { IEventHandler, IMap, IMarker, IMarkerEventType, IMarkerOption, IPopup } from '../../sdk'
-import { type ILngLat, toLnglatArray } from '../../base'
+import { type ILnglatLike, toLnglat } from '../../base'
 import { IMapEvent2AMapEvent, handleContainer, omit } from '../../utils'
 import { WhichMap } from '..'
 
@@ -58,12 +58,12 @@ export class Marker implements IMarker {
     return this._initState
   }
 
-  setLngLat(lnglat: ILngLat) {
-    this._original.setPosition(toLnglatArray(lnglat))
+  setLngLat(lnglat: ILnglatLike) {
+    this._original.setPosition(toLnglat(lnglat))
     return this
   }
 
-  getLngLat(): ILngLat {
+  getLngLat(): ILnglatLike {
     const position = this._original.getPosition()
     if (!position)
       throw new Error('cannot get lnglat')

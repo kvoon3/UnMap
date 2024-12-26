@@ -1,4 +1,4 @@
-import type { ILngLat } from '../base'
+import type { ILnglatLike } from '../base'
 import type { IMap } from './map'
 import type { IPoint } from './point'
 
@@ -24,8 +24,8 @@ interface IMapTouchEvent extends IEvent<TouchEvent> {
   // point: IPoint;
   // points: Point[];
 
-  lngLat: ILngLat
-  lngLats: ILngLat[]
+  lngLat: ILnglatLike
+  lngLats: ILnglatLike[]
 
   preventDefault: () => void
   defaultPrevented: boolean
@@ -46,7 +46,7 @@ interface IMapMouseEvent extends IEvent<MouseEvent> {
 
   // TODO: complete IPoint
   point: IPoint
-  lngLat: ILngLat
+  lngLat: ILnglatLike
 
   preventDefault: () => void
   defaultPrevented: boolean
@@ -109,7 +109,7 @@ interface ILineStringMouseEvent extends IEvent<MouseEvent> {
     | 'mouseleave'
   // TODO: complete IPoint
   // point: IPoint;
-  lngLat: ILngLat
+  lngLat: ILnglatLike
 
   preventDefault: () => void
   defaultPrevented: boolean

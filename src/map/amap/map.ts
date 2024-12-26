@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { type ILngLat, toLnglatArray } from '../../base'
+import { type ILnglatLike, toLnglat } from '../../base'
 import type { IFitBoundsOptions, IMap, IMapEventType, IMapOption } from '../../sdk'
 import { IMapEvent2AMapEvent } from '../../utils'
 import { WhichMap } from '..'
@@ -18,7 +18,7 @@ export class Map implements IMap {
 
   constructor(opt: IMapOption) {
     const zooms: [number, number] = [opt.minZoom || 2, opt.maxZoom || 30]
-    const center = opt.center ? toLnglatArray(opt.center) : opt.center
+    const center = opt.center ? toLnglat(opt.center) : opt.center
 
     this._id = nanoid()
 
@@ -54,35 +54,35 @@ export class Map implements IMap {
     return this
   }
 
-  setCenter(center: ILngLat) {
+  setCenter(center: ILnglatLike) {
     const [lng, lat] = Array.isArray(center) ? center : [center.lng, center.lat]
 
     this._original.setCenter(new AMap.LngLat(lng, lat), true, 0)
     return this
   }
 
-  getCenter(): ILngLat {
+  getCenter(): ILnglatLike {
     const { lng, lat } = this._original.getCenter()
     return [lng, lat]
   }
 
-  panTo(lnglat: ILngLat) {
+  panTo(lnglat: ILnglatLike) {
     this._original.panTo(Array.isArray(lnglat) ? lnglat : [lnglat.lng, lnglat.lat])
     return this
   }
 
-  flyTo(lnglat: ILngLat) {
+  flyTo(lnglat: ILnglatLike) {
     this.panTo(lnglat)
     return this
   }
 
-  unproject(point: IPointLike): ILngLat {
+  unproject(point: IPointLike): ILnglatLike {
     const [x, y] = Array.isArray(point) ? point : [point.x, point.y]
     const { lng, lat } = this._original.containerToLngLat(new AMap.Pixel(x, y))
     return [lng, lat]
   }
 
-  project(lnglat: ILngLat): IPointLike {
+  project(lnglat: ILnglatLike): IPointLike {
     const [lng, lat] = Array.isArray(lnglat) ? lnglat : [lnglat.lng, lnglat.lat]
     const { x, y } = this._original.lngLatToContainer(
       new AMap.LngLat(lng, lat),
@@ -115,15 +115,15 @@ export class Map implements IMap {
     return this._original.getContainer()
   }
 
-  fitBounds(bounds: [ILngLat, ILngLat], options?: IFitBoundsOptions) {
+  fitBounds(bounds: [ILnglatLike, ILnglatLike], options?: IFitBoundsOptions) {
     const [southWest, northEast] = bounds
     this._original.setBounds(
       new AMap.Bounds(
         new AMap.LngLat(...(
-          toLnglatArray(southWest)
+          toLnglat(southWest)
         )),
         new AMap.LngLat(...(
-          toLnglatArray(northEast)
+          toLnglat(northEast)
         )),
       ),
       true,
